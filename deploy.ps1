@@ -8,7 +8,13 @@ Write-Host "Deploying to gh-pages branch..." -ForegroundColor Green
 Set-Location dist
 
 # Initialize git in dist folder
+Remove-Item -Recurse -Force .git -ErrorAction SilentlyContinue
 git init
+git checkout -b main
+
+# Add .nojekyll file to bypass Jekyll processing
+New-Item -ItemType File -Path ".nojekyll" -Force | Out-Null
+
 git add -A
 git commit -m "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 

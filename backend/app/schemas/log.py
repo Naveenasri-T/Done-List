@@ -29,6 +29,3 @@ class LogCreateResponse(BaseModel):
     new_streak: int
     level_up: bool = False
     milestone_earned: Optional[str] = None
-
-
-from typing import Optional

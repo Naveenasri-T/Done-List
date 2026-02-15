@@ -24,19 +24,33 @@ function ForestDisplay({ logs }) {
         </div>
       ) : (
         <>
-          <div className="forest-ground">
-            {recentLogs.map((log, index) => (
-              <div
-                key={log.id}
-                className={`tree ${getTreeSize(log.points_earned)}`}
-                style={{
-                  animationDelay: `${index * 0.1}s`
-                }}
-                title={`${log.task_text} - ${log.points_earned} pts`}
-              >
-                {log.tree_emoji}
-              </div>
-            ))}
+          <div className="forest-scene">
+            <div className="sun">☀️</div>
+            <div className="cloud">☁️</div>
+            <div className="cloud cloud-2">☁️</div>
+            
+            <div className="forest-grid">
+              {recentLogs.map((log, index) => {
+                const row = Math.floor(index / 5)
+                const col = index % 5
+                
+                return (
+                  <div
+                    key={log.id}
+                    className={`tree-tile ${getTreeSize(log.points_earned)}`}
+                    style={{
+                      '--row': row,
+                      '--col': col,
+                      animationDelay: `${index * 0.1}s`
+                    }}
+                    title={`${log.task_text} - ${log.points_earned} pts`}
+                  >
+                    <div className="tile-diamond"></div>
+                    <div className="tree">{log.tree_emoji}</div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="forest-logs">

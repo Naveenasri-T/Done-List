@@ -1,137 +1,242 @@
+/* ===== FOREST CARD ===== */
 .forest-card {
-  animation-delay: 0.3s;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
+  min-height: 600px;
 }
 
-.empty-forest {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.empty-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.empty-forest h3 {
-  color: var(--forest-dark);
-  font-size: 22px;
-  margin-bottom: 8px;
-}
-
-.empty-forest p {
-  color: var(--forest-light);
-}
-
-.forest-ground {
-  background: linear-gradient(to bottom, transparent 60%, #8b7355 60%, #6b5744 100%);
-  border-radius: 16px;
-  padding: 40px 20px 20px;
-  min-height: 250px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  align-items: flex-end;
-  margin-bottom: 30px;
+/* ===== FOREST SCENE ===== */
+.forest-scene {
   position: relative;
+  width: 100%;
+  height: 480px;
+  background: linear-gradient(to bottom, 
+    #87CEEB 0%, 
+    #A8D8F0 35%,
+    #C5E3F6 65%,
+    #E0F2FE 100%
+  );
+  border-radius: 20px;
   overflow: hidden;
+  margin-bottom: 32px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.07),
+    0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.forest-ground::before {
-  content: '🌤️';
+/* ===== SKY ELEMENTS ===== */
+.sun {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 36px;
-  animation: float 6s ease-in-out infinite;
+  top: 35px;
+  right: 45px;
+  font-size: 65px;
+  animation: sunPulse 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 35px rgba(255, 220, 100, 0.85));
+  z-index: 10;
 }
 
-.tree {
+@keyframes sunPulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 35px rgba(255, 220, 100, 0.85));
+  }
+  50% { 
+    transform: scale(1.08) rotate(3deg);
+    filter: drop-shadow(0 0 50px rgba(255, 220, 100, 1));
+  }
+}
+
+.cloud {
+  position: absolute;
+  top: 55px;
+  left: -10%;
   font-size: 48px;
-  animation: growTree 0.6s ease-out backwards;
+  opacity: 0.75;
+  animation: cloudFloat 32s linear infinite;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+  z-index: 10;
+}
+
+.cloud-2 {
+  left: 55%;
+  top: 85px;
+  font-size: 42px;
+  opacity: 0.65;
+  animation-delay: -16s;
+  animation-duration: 38s;
+}
+
+@keyframes cloudFloat {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(120vw); }
+}
+
+/* ===== ISOMETRIC GROUND CONTAINER ===== */
+.forest-grid {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  width: 650px;
+  height: 350px;
+  perspective: 1000px;
+  perspective-origin: center center;
+}
+
+/* ===== ISOMETRIC PLATFORM ===== */
+.forest-grid::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 580px;
+  height: 340px;
+  transform: translate(-50%, -50%) rotateX(65deg);
+  background: 
+    linear-gradient(135deg, 
+      rgba(178, 214, 139, 0.9) 0%,
+      rgba(156, 204, 101, 0.95) 15%,
+      rgba(139, 195, 74, 1) 30%,
+      rgba(124, 179, 66, 1) 50%,
+      rgba(104, 159, 56, 1) 70%,
+      rgba(85, 139, 47, 1) 85%,
+      rgba(76, 125, 42, 0.95) 100%
+    );
+  border-radius: 16px;
+  box-shadow: 
+    0 35px 90px rgba(0, 0, 0, 0.45),
+    0 15px 40px rgba(0, 0, 0, 0.3),
+    inset 0 10px 30px rgba(255, 255, 255, 0.25),
+    inset 0 -10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+/* ===== TREE TILES ===== */
+.tree-tile {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: treeGrow 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
   cursor: pointer;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: calc(200 + var(--row) * 10 + var(--col));
 }
 
-.tree:hover {
-  transform: scale(1.2) translateY(-8px);
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+/* Isometric grid layout - trees arranged diagonally */
+.tree-tile {
+  left: calc(50% - 150px + (var(--col) * 75px) - (var(--row) * 42px));
+  bottom: calc(120px + (var(--row) * 35px) + (var(--col) * 22px));
 }
 
-.tree.small {
-  font-size: 36px;
-}
-
-.tree.medium {
-  font-size: 48px;
-}
-
-.tree.large {
-  font-size: 60px;
-}
-
-@keyframes growTree {
-  from {
-    transform: scale(0) translateY(20px);
+@keyframes treeGrow {
+  0% {
     opacity: 0;
+    transform: scale(0) translateY(-40px) rotate(-10deg);
   }
-  to {
-    transform: scale(1) translateY(0);
+  60% {
+    transform: scale(1.12) translateY(5px) rotate(2deg);
+  }
+  100% {
     opacity: 1;
+    transform: scale(1) translateY(0) rotate(0);
   }
 }
 
+/* ===== TREE EMOJI ===== */
+.tree {
+  font-size: 52px;
+  filter: drop-shadow(5px 10px 18px rgba(0, 0, 0, 0.5));
+  animation: treeSway 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  position: relative;
+  z-index: 5;
+}
+
+@keyframes treeSway {
+  0%, 100% { 
+    transform: rotate(-1.5deg);
+  }
+  25% {
+    transform: rotate(1.8deg);
+  }
+  75% {
+    transform: rotate(-1.8deg);
+  }
+}
+
+/* Tree sizes */
+.tree-tile.small .tree {
+  font-size: 42px;
+}
+
+.tree-tile.medium .tree {
+  font-size: 52px;
+}
+
+.tree-tile.large .tree {
+  font-size: 68px;
+}
+
+/* ===== HOVER EFFECTS ===== */
+.tree-tile:hover {
+  transform: scale(1.25) translateY(-12px);
+  z-index: 500;
+}
+
+.tree-tile:hover .tree {
+  animation: none;
+  filter: drop-shadow(8px 16px 28px rgba(0, 0, 0, 0.6));
+}
+
+/* Remove tile-diamond (not needed) */
+.tile-diamond {
+  display: none;
+}
+
+/* ===== FOREST LOGS SECTION ===== */
 .forest-logs {
-  animation: fadeIn 0.8s ease-out;
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
+  margin-top: 36px;
+  padding-top: 8px;
 }
 
 .forest-logs h3 {
-  color: var(--forest-dark);
-  font-size: 18px;
-  margin-bottom: 16px;
+  font-size: 19px;
   font-weight: 600;
+  color: var(--forest-dark, #2d5016);
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
 }
 
 .log-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-bottom: 10px;
+  gap: 14px;
 }
 
 .log-item {
   display: flex;
-  gap: 14px;
-  padding: 16px;
-  background: var(--cream);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  animation: slideIn 0.4s ease-out backwards;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--cream, #FAFAF5);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 195, 74, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.log-item:nth-child(1) { animation-delay: 0s; }
-.log-item:nth-child(2) { animation-delay: 0.1s; }
-.log-item:nth-child(3) { animation-delay: 0.2s; }
-.log-item:nth-child(4) { animation-delay: 0.3s; }
-.log-item:nth-child(5) { animation-delay: 0.4s; }
-
 .log-item:hover {
-  background: white;
-  transform: translateX(4px);
-  box-shadow: 0 4px 15px var(--shadow);
+  background: #F5F5DC;
+  transform: translateX(6px);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  border-color: rgba(139, 195, 74, 0.3);
 }
 
 .log-tree {
-  font-size: 32px;
+  font-size: 34px;
   flex-shrink: 0;
+  line-height: 1;
 }
 
 .log-content {
@@ -140,46 +245,318 @@
 }
 
 .log-text {
-  color: var(--forest-dark);
   font-weight: 500;
+  font-size: 15px;
+  color: var(--forest-dark, #2d5016);
   margin-bottom: 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .log-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  color: var(--forest-light);
+  font-size: 13px;
+  color: #6b7280;
+  gap: 12px;
 }
 
 .log-points {
+  color: var(--leaf-green, #689F38);
   font-weight: 600;
-  color: var(--leaf-green);
-  background: white;
-  padding: 3px 10px;
-  border-radius: 10px;
+  font-size: 14px;
 }
 
-@media (max-width: 600px) {
-  .forest-ground {
-    padding: 30px 15px 15px;
-    min-height: 200px;
-    gap: 10px;
-  }
+/* ===== RESPONSIVE DESIGN ===== */
 
+/* Large tablets and small desktops */
+@media (max-width: 900px) {
+  .forest-scene {
+    height: 420px;
+  }
+  
+  .forest-grid {
+    width: 550px;
+    height: 300px;
+    bottom: 50px;
+  }
+  
+  .forest-grid::before {
+    width: 500px;
+    height: 290px;
+  }
+  
+  .tree-tile {
+    left: calc(50% - 130px + (var(--col) * 65px) - (var(--row) * 36px));
+    bottom: calc(105px + (var(--row) * 30px) + (var(--col) * 19px));
+  }
+  
   .tree {
-    font-size: 36px;
+    font-size: 46px;
   }
-
-  .tree.medium {
+  
+  .tree-tile.small .tree {
+    font-size: 37px;
+  }
+  
+  .tree-tile.large .tree {
+    font-size: 60px;
+  }
+  
+  .sun {
+    font-size: 58px;
+    top: 30px;
+    right: 38px;
+  }
+  
+  .cloud {
     font-size: 42px;
   }
+  
+  .cloud-2 {
+    font-size: 37px;
+  }
+}
 
-  .tree.large {
+/* Tablets */
+@media (max-width: 768px) {
+  .forest-scene {
+    height: 380px;
+  }
+  
+  .forest-grid {
+    width: 480px;
+    height: 260px;
+    bottom: 45px;
+  }
+  
+  .forest-grid::before {
+    width: 440px;
+    height: 250px;
+  }
+  
+  .tree-tile {
+    left: calc(50% - 110px + (var(--col) * 56px) - (var(--row) * 31px));
+    bottom: calc(90px + (var(--row) * 26px) + (var(--col) * 16px));
+  }
+  
+  .tree {
+    font-size: 42px;
+  }
+  
+  .tree-tile.small .tree {
+    font-size: 34px;
+  }
+  
+  .tree-tile.large .tree {
+    font-size: 54px;
+  }
+  
+  .sun {
+    font-size: 52px;
+    top: 26px;
+    right: 32px;
+  }
+  
+  .cloud {
+    font-size: 38px;
+  }
+  
+  .cloud-2 {
+    font-size: 34px;
+  }
+}
+
+/* Large phones */
+@media (max-width: 640px) {
+  .forest-scene {
+    height: 340px;
+    border-radius: 18px;
+  }
+  
+  .forest-grid {
+    width: 420px;
+    height: 230px;
+    bottom: 38px;
+  }
+  
+  .forest-grid::before {
+    width: 390px;
+    height: 220px;
+  }
+  
+  .tree-tile {
+    left: calc(50% - 95px + (var(--col) * 48px) - (var(--row) * 27px));
+    bottom: calc(78px + (var(--row) * 22px) + (var(--col) * 14px));
+  }
+  
+  .tree {
+    font-size: 38px;
+  }
+  
+  .tree-tile.small .tree {
+    font-size: 31px;
+  }
+  
+  .tree-tile.large .tree {
     font-size: 48px;
+  }
+  
+  .sun {
+    font-size: 48px;
+    top: 22px;
+    right: 28px;
+  }
+  
+  .cloud {
+    font-size: 35px;
+  }
+  
+  .cloud-2 {
+    font-size: 31px;
+  }
+  
+  .log-item {
+    padding: 14px 16px;
+  }
+  
+  .log-tree {
+    font-size: 30px;
+  }
+  
+  .log-text {
+    font-size: 14px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .forest-scene {
+    height: 300px;
+    border-radius: 16px;
+  }
+  
+  .forest-grid {
+    width: 360px;
+    height: 200px;
+    bottom: 32px;
+  }
+  
+  .forest-grid::before {
+    width: 340px;
+    height: 190px;
+  }
+  
+  .tree-tile {
+    left: calc(50% - 80px + (var(--col) * 41px) - (var(--row) * 23px));
+    bottom: calc(66px + (var(--row) * 19px) + (var(--col) * 12px));
+  }
+  
+  .tree {
+    font-size: 34px;
+  }
+  
+  .tree-tile.small .tree {
+    font-size: 28px;
+  }
+  
+  .tree-tile.large .tree {
+    font-size: 43px;
+  }
+  
+  .sun {
+    font-size: 43px;
+    top: 18px;
+    right: 24px;
+  }
+  
+  .cloud {
+    font-size: 32px;
+  }
+  
+  .cloud-2 {
+    font-size: 28px;
+  }
+  
+  .log-item {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  
+  .log-tree {
+    font-size: 28px;
+  }
+  
+  .log-text {
+    font-size: 14px;
+  }
+  
+  .log-meta {
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .log-points {
+    font-size: 13px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .forest-scene {
+    height: 270px;
+  }
+  
+  .forest-grid {
+    width: 320px;
+    height: 180px;
+    bottom: 28px;
+  }
+  
+  .forest-grid::before {
+    width: 300px;
+    height: 170px;
+  }
+  
+  .tree-tile {
+    left: calc(50% - 68px + (var(--col) * 35px) - (var(--row) * 19px));
+    bottom: calc(58px + (var(--row) * 16px) + (var(--col) * 10px));
+  }
+  
+  .tree {
+    font-size: 30px;
+  }
+  
+  .tree-tile.small .tree {
+    font-size: 25px;
+  }
+  
+  .tree-tile.large .tree {
+    font-size: 38px;
+  }
+  
+  .sun {
+    font-size: 38px;
+    top: 16px;
+    right: 20px;
+  }
+  
+  .cloud {
+    font-size: 28px;
+  }
+  
+  .cloud-2 {
+    font-size: 25px;
+  }
+  
+  .log-item {
+    padding: 10px 12px;
+  }
+  
+  .log-tree {
+    font-size: 26px;
   }
 }

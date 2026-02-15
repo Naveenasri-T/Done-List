@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import API_BASE_URL from '../config/api'
 import './Auth.css'
 
 function Register({ onLogin }) {
@@ -27,7 +28,7 @@ function Register({ onLogin }) {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/v1/auth/register', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })

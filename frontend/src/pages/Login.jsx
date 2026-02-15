@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import API_BASE_URL from '../config/api'
 import './Auth.css'
 
 function Login({ onLogin }) {
@@ -14,7 +15,7 @@ function Login({ onLogin }) {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/v1/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

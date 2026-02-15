@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
+import API_BASE_URL from '../config/api'
 import './Profile.css'
 
 function Profile({ token, user, setUser, onLogout }) {
@@ -15,7 +16,7 @@ function Profile({ token, user, setUser, onLogout }) {
     setMessage('')
 
     try {
-      const response = await fetch('/api/v1/auth/me', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -41,7 +42,7 @@ function Profile({ token, user, setUser, onLogout }) {
 
   const handleExport = async (format) => {
     try {
-      const response = await fetch(`/api/v1/export/${format}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/export/${format}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
 

@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import TaskForm from '../components/TaskForm'
 import ForestDisplay from '../components/ForestDisplay'
 import StatsPanel from '../components/StatsPanel'
+import API_BASE_URL from '../config/api'
 import './Dashboard.css'
 
 function Dashboard({ token, user, onLogout }) {
@@ -21,9 +22,9 @@ function Dashboard({ token, user, onLogout }) {
       const headers = { 'Authorization': `Bearer ${token}` }
       
       const [logsRes, streaksRes, todayRes] = await Promise.all([
-        fetch('/api/v1/logs', { headers }),
-        fetch('/api/v1/streaks', { headers }),
-        fetch('/api/v1/logs/today', { headers })
+        fetch(`${API_BASE_URL}/api/v1/logs`, { headers }),
+        fetch(`${API_BASE_URL}/api/v1/streaks`, { headers }),
+        fetch(`${API_BASE_URL}/api/v1/logs/today`, { headers })
       ])
 
       if (logsRes.ok) {

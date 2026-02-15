@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
+import API_BASE_URL from './config/api'
 import './App.css'
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('/api/v1/auth/me', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       if (response.ok) {

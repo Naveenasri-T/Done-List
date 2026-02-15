@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import API_BASE_URL from '../config/api'
 import './TaskForm.css'
 
 function TaskForm({ token, onSuccess }) {
@@ -13,7 +14,7 @@ function TaskForm({ token, onSuccess }) {
     setMessage('')
 
     try {
-      const response = await fetch('/api/v1/logs', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/logs`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

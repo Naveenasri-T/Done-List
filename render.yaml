@@ -18,13 +18,13 @@ services:
       - key: ENVIRONMENT
         value: production
 
-  # Frontend Static Site
+  # Frontend Web Service
   - type: web
     name: forest-frontend
-    runtime: static
+    runtime: node
     rootDir: frontend
     buildCommand: "npm install && npm run build"
-    staticPublishPath: ./dist
+    startCommand: "npm start"
     envVars:
       - key: NODE_VERSION
         value: "22.22.0"

@@ -1,11 +1,13 @@
 .auth-container {
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
+  width: 100%;
 }
 
 .auth-card {
@@ -129,9 +131,10 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .auth-card {
     padding: 40px 30px;
+    max-width: 100%;
   }
   
   .forest-icon {
@@ -140,5 +143,27 @@
   
   .auth-header h1 {
     font-size: 26px;
+  }
+  
+  .tree-emoji {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 30px 20px;
+  }
+  
+  .forest-icon {
+    font-size: 48px;
+  }
+  
+  .auth-header h1 {
+    font-size: 24px;
+  }
+  
+  .auth-container {
+    padding: 15px;
   }
 }

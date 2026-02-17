@@ -46,7 +46,7 @@ function App() {
   }
 
   return (
-    <Router basename="/Done-List">
+    <Router>
       <Routes>
         <Route path="/login" element={
           token ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />

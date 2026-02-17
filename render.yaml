@@ -1,15 +1,18 @@
 services:
   - type: web
-    name: done-list-api
-    env: python
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    name: forest-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port 10000"
     envVars:
       - key: DATABASE_URL
-        sync:false
+        sync: false
       - key: SECRET_KEY
-        generateValue: true
-      - key: CORS_ORIGINS
-        value: https://naveenasri-t.github.io
+        sync: false
+      - key: ALGORITHM
+        sync: false
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        sync: false
       - key: ENVIRONMENT
         value: production

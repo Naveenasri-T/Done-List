@@ -17,6 +17,12 @@ services:
         sync: false
       - key: ENVIRONMENT
         value: production
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://forest-frontend.onrender.com
 
   # Frontend Web Service
   - type: web
@@ -30,4 +36,6 @@ services:
         value: "22.22.0"
       - key: VITE_API_URL
         value: https://done-list.onrender.com
+      - key: VITE_GOOGLE_CLIENT_ID
+        value: 483412469989-pi6g2p4oqld7re2cbv9hc8pk9p4mif5l.apps.googleusercontent.com
 

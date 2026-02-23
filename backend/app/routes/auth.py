@@ -5,8 +5,25 @@ from app.models.user import User
 from app.models.streak import Streak
 from app.schemas.user import UserCreate, UserLogin, UserResponse, TokenResponse, UserUpdate
 from app.utils.auth import get_password_hash, verify_password, create_access_token, get_current_user
+from pydantic import BaseModel
+import httpx
+import re
 
 router = APIRouter()
+
+
+class GoogleAuthRequest(BaseModel):
+    access_token: str
+
+
+def _make_username_from_email(email: str, db: Session) -> str:
+    base = re.sub(r'[^a-zA-Z0-9]', '', email.split('@')[0])[:20] or "user"
+    username = base
+    counter = 1
+    while db.query(User).filter(User.username == username).first():
+        username = f"{base}{counter}"
+        counter += 1
+    return username
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -114,3 +131,66 @@ async def update_user(
     db.refresh(current_user)
     
     return UserResponse.model_validate(current_user)
+
+
+@router.post("/google", response_model=TokenResponse)
+async def google_auth(payload: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """Authenticate or register a user via Google OAuth"""
+    # Verify access token and get user info from Google
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            headers={"Authorization": f"Bearer {payload.access_token}"}
+        )
+
+    if resp.status_code != 200:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid Google access token"
+        )
+
+    info = resp.json()
+    google_id = info.get("sub")
+    email = info.get("email")
+    picture = info.get("picture")
+
+    # Find existing user by google_id or email
+    user = db.query(User).filter(User.google_id == google_id).first()
+    if not user and email:
+        user = db.query(User).filter(User.email == email).first()
+        if user:
+            # Link google_id to existing account
+            user.google_id = google_id
+            if picture and not user.avatar_url:
+                user.avatar_url = picture
+            db.commit()
+            db.refresh(user)
+
+    if not user:
+        # Create new user
+        username = _make_username_from_email(email, db)
+        user = User(
+            username=username,
+            email=email,
+            google_id=google_id,
+            avatar_url=picture,
+            password_hash=None
+        )
+        db.add(user)
+        db.flush()
+
+        streak_types = ["daily", "weekly", "monthly", "yearly"]
+        for streak_type in streak_types:
+            streak = Streak(user_id=user.id, streak_type=streak_type)
+            db.add(streak)
+
+        db.commit()
+        db.refresh(user)
+
+    access_token = create_access_token(data={"sub": str(user.id)})
+    return TokenResponse(
+        access_token=access_token,
+        token_type="bearer",
+        user=UserResponse.model_validate(user)
+    )
+

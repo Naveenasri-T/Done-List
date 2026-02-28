@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 class GoogleAuthRequest(BaseModel):
-    access_token: str
+    credential: str  # Google ID token
 
 
 def _make_username_from_email(email: str, db: Session) -> str:
@@ -135,18 +135,17 @@ async def update_user(
 
 @router.post("/google", response_model=TokenResponse)
 async def google_auth(payload: GoogleAuthRequest, db: Session = Depends(get_db)):
-    """Authenticate or register a user via Google OAuth"""
-    # Verify access token and get user info from Google
+    """Authenticate or register a user via Google OAuth ID token"""
+    # Verify ID token with Google tokeninfo endpoint
     async with httpx.AsyncClient() as client:
         resp = await client.get(
-            "https://www.googleapis.com/oauth2/v3/userinfo",
-            headers={"Authorization": f"Bearer {payload.access_token}"}
+            f"https://oauth2.googleapis.com/tokeninfo?id_token={payload.credential}"
         )
 
     if resp.status_code != 200:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Google access token"
+            detail="Invalid Google token"
         )
 
     info = resp.json()

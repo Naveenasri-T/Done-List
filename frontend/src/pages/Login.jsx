@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useGoogleLogin } from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google'
 import API_BASE_URL from '../config/api'
 import './Auth.css'
 
@@ -9,7 +9,6 @@ function Login({ onLogin }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -37,14 +36,13 @@ function Login({ onLogin }) {
     }
   }
 
-  const handleGoogleSuccess = async (tokenResponse) => {
-    setGoogleLoading(true)
+  const handleGoogleSuccess = async (credentialResponse) => {
     setError('')
     try {
       const res = await fetch(`${API_BASE_URL}/api/v1/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ access_token: tokenResponse.access_token })
+        body: JSON.stringify({ credential: credentialResponse.credential })
       })
       const data = await res.json()
       if (res.ok) {
@@ -54,17 +52,8 @@ function Login({ onLogin }) {
       }
     } catch (err) {
       setError('Connection error. Please try again.')
-    } finally {
-      setGoogleLoading(false)
     }
   }
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: handleGoogleSuccess,
-    onError: () => setError('Google login failed. Please try again.'),
-    flow: 'implicit',
-    ux_mode: 'popup',
-  })
 
   return (
     <div className="auth-container fade-in">
@@ -114,15 +103,17 @@ function Login({ onLogin }) {
           <span>or</span>
         </div>
 
-        <button
-          className="btn btn-google btn-full"
-          onClick={() => googleLogin()}
-          disabled={googleLoading}
-          type="button"
-        >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" height="20" />
-          {googleLoading ? 'Connecting...' : 'Continue with Google'}
-        </button>
+        <div className="google-btn-wrapper">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError('Google login failed. Please try again.')}
+            width="100%"
+            theme="outline"
+            shape="rectangular"
+            text="continue_with"
+            size="large"
+          />
+        </div>
 
         <div className="auth-footer">
           <p>

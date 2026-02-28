@@ -22,7 +22,7 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: CORS_ORIGINS
-        value: https://forest-frontend.onrender.com
+        value: https://done-list-frontend.onrender.com
 
   # Frontend Web Service
   - type: web

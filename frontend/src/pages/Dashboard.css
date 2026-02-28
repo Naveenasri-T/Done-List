@@ -23,27 +23,44 @@
 
 .dashboard-right {
   position: sticky;
-  top: 90px;
-  max-height: calc(100vh - 120px);
+  top: 70px;
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .dashboard-right {
     position: static;
+    max-height: none;
+    overflow-y: visible;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .dashboard-main {
-    padding: 20px 15px;
+    padding: 20px 16px;
   }
-  
+
   .dashboard-grid {
     gap: 20px;
+  }
+
+  .dashboard-left {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: 16px 12px;
+  }
+
+  .dashboard-grid {
+    gap: 14px;
   }
 }

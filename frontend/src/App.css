@@ -86,11 +86,13 @@
   padding: 14px 18px;
   border: 2px solid #d1e7dd;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 16px; /* prevents iOS zoom */
   font-family: 'Poppins', sans-serif;
   transition: all 0.3s ease;
   background: white;
   color: var(--forest-dark);
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .input-group input:focus,
@@ -113,6 +115,13 @@
   padding: 28px;
   box-shadow: 0 8px 30px var(--shadow);
   transition: all 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
 }
 
 .card:hover {

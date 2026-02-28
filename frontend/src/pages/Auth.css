@@ -1,6 +1,5 @@
 .auth-container {
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,10 +11,10 @@
 
 .auth-card {
   background: white;
-  border-radius: 30px;
-  padding: 50px 45px;
+  border-radius: 24px;
+  padding: 40px 36px;
   box-shadow: 0 20px 60px rgba(26, 58, 46, 0.15);
-  max-width: 450px;
+  max-width: 440px;
   width: 100%;
   position: relative;
   z-index: 10;
@@ -172,37 +171,49 @@
 
 @media (max-width: 768px) {
   .auth-card {
-    padding: 40px 30px;
-    max-width: 100%;
+    padding: 32px 24px;
   }
-  
+
   .forest-icon {
-    font-size: 56px;
+    font-size: 52px;
   }
-  
+
   .auth-header h1 {
-    font-size: 26px;
+    font-size: 24px;
   }
-  
+
   .tree-emoji {
     font-size: 60px;
   }
 }
 
 @media (max-width: 480px) {
-  .auth-card {
-    padding: 30px 20px;
-  }
-  
-  .forest-icon {
-    font-size: 48px;
-  }
-  
-  .auth-header h1 {
-    font-size: 24px;
-  }
-  
   .auth-container {
-    padding: 15px;
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+
+  .forest-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+  }
+
+  .auth-header h1 {
+    font-size: 22px;
+  }
+
+  .auth-header p {
+    font-size: 14px;
+  }
+
+  .btn-full {
+    padding: 14px;
+    font-size: 16px;
   }
 }

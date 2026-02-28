@@ -14,7 +14,7 @@ limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version="1.0.0",
-    description="Forest Done Log API - Gamified task logging with streaks"
+    description="Done List API - Gamified task logging with streaks"
 )
 
 # Add rate limiting
@@ -46,7 +46,7 @@ app.include_router(export_data.router, prefix=f"{settings.API_V1_PREFIX}/export"
 @app.get("/")
 async def root():
     return {
-        "message": "Forest Done Log API",
+        "message": "Done List API",
         "version": "1.0.0",
         "docs": "/docs"
     }

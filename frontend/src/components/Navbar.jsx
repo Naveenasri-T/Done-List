@@ -9,7 +9,7 @@ function Navbar({ user, onLogout }) {
       <div className="navbar-container">
         <Link to="/dashboard" className="navbar-logo">
           <span className="logo-icon">🌲</span>
-          <span className="logo-text">Forest Done</span>
+          <span className="logo-text">Done List</span>
         </Link>
 
         <div className="navbar-menu">

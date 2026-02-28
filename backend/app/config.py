@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     # App
     ENVIRONMENT: str = "development"
     API_V1_PREFIX: str = "/api/v1"
-    PROJECT_NAME: str = "Forest Done Log API"
+    PROJECT_NAME: str = "Done List API"
     
     @property
     def cors_origins_list(self) -> List[str]:
